@@ -16,6 +16,9 @@ public class VRGrabbable : MonoBehaviour
 
     public GameObjectEvent OnGrabbed;
     public GameObjectEvent OnReleased;
+    [HideInInspector]
+    public bool isDynamic;
+    public Collider collider;
 
     int JustGrabbed = 0;
 
@@ -25,6 +28,11 @@ public class VRGrabbable : MonoBehaviour
         if (rootObject == null)
         {
             rootObject = transform;
+        }
+        collider = GetComponent<Collider>();
+        if (!collider.isTrigger && !collider.attachedRigidbody.isKinematic)
+        {
+            isDynamic = true;
         }
     }
 

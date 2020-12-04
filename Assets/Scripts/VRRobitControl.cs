@@ -393,13 +393,13 @@ public class VRRobitControl : MonoBehaviour
         Finger[] array;
         if (left)
         {
-            collider = hands[0].currentObject.GetComponent<Collider>();
+            collider = hands[0].heldObject.GetComponent<Collider>();
             array = FingersL;
             OverrideHandL = true;
         }
         else
         {
-            collider = hands[1].currentObject.GetComponent<Collider>();
+            collider = hands[1].heldObject.GetComponent<Collider>();
             array = FingersR;
             OverrideHandR = true;
         }
