@@ -37,10 +37,15 @@ public class VRGrabber : MonoBehaviour
     public float GrabbableRoughnessFreq = 1000;
     public float GrabbableRoughnessAmp = .1f;
 
+    Rigidbody rigidBody;
+
+    static int VelocityQueueSize = 10;
+    Queue<Vector3> Velocity = new Queue<Vector3>(VelocityQueueSize);
+
+    Vector3 OldPos;
+
 
     int JustReleased = 0;
-
-    static readonly float CubeDiagonal = Mathf.Sqrt(3);
 
     private void Start()
     {
@@ -48,6 +53,7 @@ public class VRGrabber : MonoBehaviour
         {
             VRHaptics.Init(vibrator);
         }
+        rigidBody = GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
@@ -58,6 +64,47 @@ public class VRGrabber : MonoBehaviour
             grabAction.AddOnStateDownListener(HandGrab, hand);
             grabAction.AddOnStateUpListener(HandRelease, hand);
         }
+        OldPos = transform.position;
+    }
+
+    void UpdateVelocity()
+    {
+        if (Velocity.Count == 10)
+        {
+            Velocity.Dequeue();
+        }
+        Velocity.Enqueue((transform.position - OldPos) * Time.deltaTime * 3600);
+        OldPos = transform.position;
+    }
+
+    Vector3 GetReleaseVelocity()
+    {
+        //TODO: throwing still feels bad
+        //TODO: also get angular velocity
+        int AverageSize = 1;
+        int averageCount = 0;
+        int peakIndex = 0;
+        float peakValue = 0;
+        Vector3[] Vel = Velocity.ToArray();
+        for(int i = 0; i < Vel.Length; i++)
+        {
+            if (Vel[i].magnitude > peakValue)
+            {
+                peakValue = Vel[i].magnitude;
+                peakIndex = i;
+            }
+        }
+        Vector3 AverageVel = Vector3.zero;
+        for (int i = peakIndex - AverageSize; i <= peakIndex+AverageSize; i++)
+        {
+            if (i > 0 && i < Vel.Length)
+            {
+                AverageVel += Vel[i];
+                averageCount++;
+            }
+        }
+        AverageVel /= averageCount;
+        return AverageVel;
     }
 
     private void OnDisable()
@@ -76,6 +123,10 @@ public class VRGrabber : MonoBehaviour
         {
             JustReleased--;
         }
+        if (Grabbing)
+        {
+            UpdateVelocity();
+        }
     }
 
     private void FixedUpdate()
@@ -91,7 +142,10 @@ public class VRGrabber : MonoBehaviour
                     //we use the hand's position in grabbable space rather than the inverse, to allow for sliding effects when rotating the object
                     //TODO: account for object scale
                     NewPosition = grabbable.transform.InverseTransformPoint(transform.position);
-                    distance = (NewPosition - grabbablePositions[grabbable]).magnitude * (grabbable.transform.lossyScale.magnitude/CubeDiagonal);
+
+                    //if the object is unevenly scaled, treat the smallest axis as the basis for bump scaling
+                    float Scale = Mathf.Min(grabbable.transform.lossyScale.x, grabbable.transform.lossyScale.y, grabbable.transform.lossyScale.z);
+                    distance = (NewPosition - grabbablePositions[grabbable]).magnitude * Scale;
                     if (distance > 1 / GrabbableRoughnessFreq) //in theory, this just keeps our last position on the last bump until we hit a new one, if we're traveling at less than one bump per timestep
                     {
                         VRHaptics.Slide(distance, GrabbableRoughnessFreq, GrabbableRoughnessAmp, 0, 0, hand);
@@ -104,10 +158,30 @@ public class VRGrabber : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        EnterCollision(other);
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        ExitCollision(other);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        EnterCollision(collision.collider);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        ExitCollision(collision.collider);
+    }
+
+
+    void EnterCollision(Collider other)
+    {
         VRGrabbable grabbable = other.GetComponent<VRGrabbable>();
         if (grabbable)
         {
-            if (ObjectTags.CompareTags(other.GetComponent<ObjectTags>(), TagsBlacklist, TagsWhitelist,  StrictWhitelist))
+            if (ObjectTags.CompareTags(other.GetComponent<ObjectTags>(), TagsBlacklist, TagsWhitelist, StrictWhitelist))
             {
                 if (grabberType == GrabberType.Force || (grabberType == GrabberType.Auto && grabbable.grabbed == null))
                 {
@@ -126,7 +200,7 @@ public class VRGrabber : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    void ExitCollision(Collider other)
     {
         VRGrabbable grabbable = other.GetComponent<VRGrabbable>();
         if (grabbable)
@@ -136,8 +210,6 @@ public class VRGrabber : MonoBehaviour
         }
     }
 
-
-
     void InitiateGrab(VRGrabbable grabbable)
     {
         if (grabbable != null)
@@ -146,6 +218,11 @@ public class VRGrabber : MonoBehaviour
             {
                 Grabbing = true;
                 currentObject = grabbable;
+                Collider collider = grabbable.GetComponent<Collider>();
+                if (!collider.isTrigger)
+                {
+                    collider.attachedRigidbody.isKinematic = true;
+                }
                 if (currentObject.grabbed)
                 {
                     currentObject.grabbed.GrabSteal();
@@ -208,6 +285,15 @@ public class VRGrabber : MonoBehaviour
     {
         currentObject.rootObject.SetParent(null, true);
         currentObject.OnRelease();
+        Collider collider = currentObject.GetComponent<Collider>();
+        ObjectTags tags = currentObject.GetComponent<ObjectTags>();
+        if (!collider.isTrigger)
+        {
+            if (!tags || !tags.HasTag("StayKinematic"))
+                collider.attachedRigidbody.isKinematic = false;
+
+            collider.attachedRigidbody.velocity = GetReleaseVelocity();
+        }
         Released();
     }
 

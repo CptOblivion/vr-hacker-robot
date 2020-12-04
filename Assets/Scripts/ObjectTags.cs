@@ -65,4 +65,16 @@ public class ObjectTags : MonoBehaviour
     {
         return CompareTags(this, TagsBlacklist, TagsWhitelist, StrictWhitelist);
     }
+
+    public bool HasTag(string tag)
+    {
+        foreach(string testTag in Tags)
+        {
+            if (testTag.Equals(tag))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
