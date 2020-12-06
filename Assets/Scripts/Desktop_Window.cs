@@ -14,6 +14,8 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
     //TODO: allow multi-edit
     //TODO: figure out alphaHitTestMinimumThreshold and 9-sliced sprites (currently doesn't work)
     public bool AlphaHitTest = false;
+    public bool KillOnFocusLoss = false;
+    public bool HideOnStartup = false;
 
     //TODO: make this a prefab and spawn it
     public Button minimizedButton; //this button can always exist, and just be disabled
@@ -27,7 +29,7 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
     [HideInInspector]
     public Desktop_TitleBar titleBar;
 
-    static Desktop_Window Active;
+    public static Desktop_Window Active;
     CanvasGroup canvasGroup;
 
     Vector2 TargetSize;
@@ -35,6 +37,8 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
     float AnimTimer;
     Vector2? AnimTargetPos = null;
     Transform AnimStartPos = null;
+
+
 
     static readonly Vector2 ButtonTargetOffset = new Vector2(0, 128);
 
@@ -52,6 +56,10 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
             {
                 image.alphaHitTestMinimumThreshold = .9f;
             }
+        }
+        if (HideOnStartup) //TODO: this might need to be moved to Start()
+        {
+            gameObject.SetActive(false);
         }
     }
 
@@ -80,15 +88,15 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
             if (!Animate(OpenTime))
             {
                 animState = AnimState.Open;
-                canvasGroup.interactable = true;
+                FinishedOpening();
             }
         }
         else if (animState == AnimState.Closing)
         {
             if (!Animate(CloseTime, true))
             {
-                gameObject.SetActive(false);
                 AnimTargetPos = null;//just in case this was set somehow, we don't want to play an un-minimize animation when we re-expand
+                FinishedClosing();
             }
         }
         else if (animState == AnimState.Expanding)
@@ -96,17 +104,16 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
             if (!Animate(ExpandTime))
             {
                 animState = AnimState.Open;
-                canvasGroup.interactable = true;
+                FinishedOpening();
             }
         }
         else if (animState == AnimState.Minimizing)
         {
             if (!Animate(MinimizeTime, true))
             {
-                gameObject.SetActive(false);
                 minimizedButton.GetComponent<CanvasGroup>().alpha = 1;
                 minimizedButton.interactable = true;
-                //TODO: enable taskbar button
+                FinishedClosing();
             }
         }
     }
@@ -173,7 +180,6 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
         //reversing start and target pos because we'll be playing the anim backwards on minimize, and we'll want TargetPosition to still be set on ExpandWindow
         AnimTargetPos = transform.position;
 
-        //TODO: add button to taskbar, hide it, set AnimTargetPos, subscribe ExpandWindow to the button
         minimizedButton.gameObject.SetActive(true);
         minimizedButton.transform.SetAsFirstSibling();
         minimizedButton.GetComponent<CanvasGroup>().alpha = 0;
@@ -238,6 +244,11 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
     {
         if (titleBar)
             titleBar.SetActiveColor(false);
+        if (KillOnFocusLoss)
+        {
+            CloseWindow();
+        }
+
     }
 
     public void ConstrainPosition(bool ConstrainTop = true)
@@ -245,14 +256,18 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
         //optionally don't constrain to the top for animations that need to be able to pass into the taskbar
         RectTransform rect = (RectTransform)transform;
         Vector2 NewPos = rect.localPosition;
-        if (ConstrainTop && NewPos.y > 0)
-            NewPos.y = 0;
-        else if (NewPos.y < -DesktopSpace.y + rect.rect.height)
-            NewPos.y = -DesktopSpace.y + rect.rect.height;
-        if (NewPos.x < 0)
-            NewPos.x = 0;
-        else if (NewPos.x > DesktopSpace.x - rect.rect.width)
-            NewPos.x = DesktopSpace.x - rect.rect.width;
+
+        //rect.rect returns the rect in local space (relative to its own pivot), so here's the rect extents in parent space, not normalized. MinX, MinY, MaxX, MaxY.
+        Vector4 ActualRect = new Vector4(NewPos.x + rect.rect.min.x, NewPos.y + rect.rect.min.y, NewPos.x + rect.rect.max.x, NewPos.y + rect.rect.max.y);
+
+        if (ConstrainTop && ActualRect.w> 0)
+            NewPos.y -= ActualRect.w;
+        else if (ActualRect.y < -DesktopSpace.y)
+            NewPos.y -= ActualRect.y - -DesktopSpace.y; //I should just put that in as a plus but it's easier for my dumb brain to think of it as subtracting a negative
+        if (ActualRect.x < 0)
+            NewPos.x -= ActualRect.x;
+        else if (ActualRect.z > DesktopSpace.x)
+            NewPos.x -= ActualRect.z -DesktopSpace.x;
         rect.localPosition = NewPos;
     }
 
@@ -270,10 +285,21 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler
             GainedFocus();
         }
     }
-    /*
-    public virtual void CloseWindowButton()
+
+    /// <summary>
+    /// called after OpenWindow and ExpandWindow are done animating, 
+    /// mostly as a hook for inheritors to use
+    /// </summary>
+    protected virtual void FinishedOpening() 
     {
-        CloseWindow();
+        canvasGroup.interactable = true;
     }
-    */
+    /// <summary>
+    /// called after Closewindow and MinimizeWindow are done animating, 
+    /// mostly as a hook for inheritors to use
+    /// </summary>
+    protected virtual void FinishedClosing()
+    { 
+        gameObject.SetActive(false);
+    }
 }

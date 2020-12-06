@@ -29,7 +29,7 @@ public class Desktop_PINPad : Desktop_Window
     }
     public override void LostFocus()
     {
-        base.LostFocus();
+        //base.LostFocus();
         CancelButton();
     }
 

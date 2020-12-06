@@ -16,7 +16,7 @@ public class Desktop_WindowElement : MonoBehaviour, IPointerDownHandler
 
     protected virtual void Awake()
     {
-        window = transform.parent.GetComponentInParent<Desktop_Window>();
+        window = transform.GetComponentInParent<Desktop_Window>();
         if (AlphaHitTest) //TODO: figure out if I can test for image editability and automatically disable this if it's not available (catch an error might be the only way?)
         {
             Image image = GetComponent<Image>();

@@ -18,7 +18,7 @@ public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHan
     public override void OnPointerDown(PointerEventData eventData)
     {
         base.OnPointerDown(eventData);
-        cursorOffset = Input.mousePosition - transform.parent.position;
+        cursorOffset = Input.mousePosition - window.transform.position;
         dragging = true;
 
     }
@@ -27,7 +27,7 @@ public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHan
     {
         if (dragging)
         {
-            RectTransform parent = (RectTransform)transform.parent;
+            RectTransform parent = (RectTransform)window.transform;
             parent.position = (Vector2)Input.mousePosition - cursorOffset;
             window.ConstrainPosition();
         }
