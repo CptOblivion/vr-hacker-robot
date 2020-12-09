@@ -6,9 +6,8 @@ using UnityEngine.UI;
 public class Desktop_SystemMenu : Desktop_Window
 {
     public Button systemButton;
-    protected override void Start()
+    void Start()
     {
-        base.Start();
         systemButton.onClick.AddListener(OpenWindow);
         gameObject.SetActive(false);
     }

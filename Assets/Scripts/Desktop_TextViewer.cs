@@ -22,7 +22,6 @@ public class Desktop_TextViewer : Desktop_Window
     protected override void Awake()
     {
         base.Awake();
-        gameObject.SetActive(false);
         current = this;
         docTitle.text = "";
         docContents.text = "";
@@ -39,7 +38,6 @@ public class Desktop_TextViewer : Desktop_Window
         current.ExpandWindow();
         current.FocusWindow();
         UpdateCurrentButton(documents[doc]);
-        //current.currentDocument = doc;
         current.docTitle.text = doc.Title;
         current.docContents.text = doc.Contents;
     }

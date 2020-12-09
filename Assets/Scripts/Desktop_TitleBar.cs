@@ -10,6 +10,8 @@ public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHan
     public Color ColorInactive;
     Vector2 cursorOffset;
     bool dragging = false;
+    public Button stowButton;
+    public Text title;
     private void OnEnable()
     {
         transform.SetAsLastSibling(); //draw on top of the rest of the window (at least, initially)
@@ -17,6 +19,7 @@ public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHan
 
     public override void OnPointerDown(PointerEventData eventData)
     {
+        //TODO: add a check to see if we're resizing instead of moving
         base.OnPointerDown(eventData);
         cursorOffset = Input.mousePosition - window.transform.position;
         dragging = true;

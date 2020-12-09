@@ -20,7 +20,6 @@ public class Desktop_NetworkDevices : Desktop_Window
     {
         base.Awake();
         current = this;
-        gameObject.SetActive(false);
         Desktop_NetworkDeviceButton.InitializeButtons(deviceButtonPrefab, controlsFrame);
     }
 

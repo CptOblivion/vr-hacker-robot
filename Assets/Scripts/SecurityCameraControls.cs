@@ -19,8 +19,6 @@ public class SecurityCameraControls : Desktop_Window //TODO: inherit from Deskto
     {
         base.Awake();
         current = this;
-        gameObject.SetActive(false);
-        //TODO: move this component to the window root, so we can just disable our own gameobject without having to muck about with w.root
     }
 
     public static void ActivateCamera(SecurityCamera securityCamera)
