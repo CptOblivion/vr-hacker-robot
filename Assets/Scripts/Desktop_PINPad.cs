@@ -83,8 +83,6 @@ public class Desktop_PINPad : Desktop_Window
             UpdateReadout();
         }
     }
-
-    //TODO: make this button look less like a cancel button
     public void BackspaceButton()
     {
         if (CurrentPIN > 9)

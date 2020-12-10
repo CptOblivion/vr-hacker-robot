@@ -51,9 +51,9 @@ public class VRGrabber : MonoBehaviour
     public float GrabbableRoughnessFreq = 1000;
     public float GrabbableRoughnessAmp = .1f;
 
-
-    static int VelocityQueueSize = 5;
-    Queue<VelocityContainer> Velocity = new Queue<VelocityContainer>(VelocityQueueSize);
+    //TODO: should probably make public and adjustable in the editor
+    static readonly int VelocityQueueSize = 5;
+    readonly Queue<VelocityContainer> Velocity = new Queue<VelocityContainer>(VelocityQueueSize);
     Vector3 GrabbedOffset;
 
     Vector3 LastVelocity;
@@ -150,6 +150,7 @@ public class VRGrabber : MonoBehaviour
         return new Vector3[] { AverageVel, AverageAngular };
     }
 
+    /* old attempts at getting throw velocity
     Vector3[] GetReleaseVelocityOffset()
     {
 
@@ -224,6 +225,7 @@ public class VRGrabber : MonoBehaviour
         AverageAngular /= averageCount;
         return new Vector3[] { AverageVel, AverageAngular };
     }
+    */
 
     private void OnDisable()
     {

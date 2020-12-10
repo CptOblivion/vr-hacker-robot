@@ -11,7 +11,7 @@ public class DebugDrawLine : MonoBehaviour
     void Start()
     {
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.SetVertexCount(2);
+        lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, Origin);
         lineRenderer.SetPosition(1, Target);
         lineRenderer.endWidth = .002f;

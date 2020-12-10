@@ -42,13 +42,6 @@ public class DebugDisplay : MonoBehaviour
         textOb.text = text;
     }
 
-    private void LateUpdate()
-    {
-        //text = "";
-    }
-
-
-
     public static void SetText(string debugText)
     {
         text = debugText;

@@ -92,8 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AlphaHitTest: 0
   window: {fileID: 0}
-  ColorActive: {r: 0.41960785, g: 0.7058824, b: 1, a: 1}
-  ColorInactive: {r: 0.6, g: 0.7176471, b: 0.8392157, a: 1}
+  theme: {fileID: 11400000, guid: dfdc93dd27b30ea4b892d59a73df02d1, type: 2}
   stowButton: {fileID: 751458244580841658}
   title: {fileID: 110246969197317045}
 --- !u!1 &110246968860572370
@@ -203,9 +202,12 @@ MonoBehaviour:
   KillOnFocusLoss: 0
   HideOnStartup: 0
   CloseToTaskbar: 0
+  Resizable: 0
+  MinSize: {x: 0, y: 0}
   theme: {fileID: 11400000, guid: dfdc93dd27b30ea4b892d59a73df02d1, type: 2}
   appIcon: {fileID: 0}
   AppName: UNTITLED APPLICATION
+  Resizing: 0
   minimizedPrefab: {fileID: 8170051949817875509, guid: 9e07bd2d1344de54dafac6bfc6f6da29, type: 3}
   titleBar: {fileID: 0}
 --- !u!1 &110246969197317043

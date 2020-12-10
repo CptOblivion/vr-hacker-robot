@@ -20,19 +20,13 @@ public class Desktop_Node : MonoBehaviour
         [HideInInspector]
         public Desktop_ListButton button;
 
-        //TODO: add a leaf icon slot- auto-fill for image/text/dummy, manually set for NetworkDevice (EGcamera/lightswitch/door lock/etc)
+        //TODO: add a leaf icon slot- auto-fill for image/text/dummy, manually set for NetworkDevice (EG camera/lightswitch/door lock/etc)
         //TODO: store node map in a file separate from scene, generate nodes at runtime
 
         public string DeviceID;
         public TextDocument doc;
         //TODO: image viewer
         //  with "set as wallpaper" option, of course
-
-        //TODO: text reader
-        //  metadata?
-
-        //TODO: icons for different leaf types
-
     }
     public string NodeName = "[Untitled Node]";
     public int PIN = -1;
@@ -186,7 +180,6 @@ public class Desktop_Node : MonoBehaviour
     }
     void ListContents(bool FirstTime = false)
     {
-        //TODO: don't actually spawn the buttons until the delay is done?
         float LeafDelay = FirstTime ? nodeStyle.ButtonAnimFlyoutFirstDelay : 0;
         for (int i = 0; i < Leaves.Length; i++)
         {
@@ -218,7 +211,6 @@ public class Desktop_Node : MonoBehaviour
             }
             leaf.button.Setup(this, i, leaf.LeafName, icon);
 
-            //TODO: leafAnim origin should be a transform instead of a static location (to follow button as it animates)
             Desktop_ListButton leafAnim = Instantiate(nodeStyle.button_NodeContents_Prefab.gameObject, Desktop_Nodemap_Background.current.window.transform).GetComponent<Desktop_ListButton>();
             leafAnim.SetupFlyout(leaf.LeafName, icon, transform, leaf.button, nodeStyle.ButtonAnimFlyoutTime, LeafDelay);
 

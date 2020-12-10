@@ -18,7 +18,7 @@ public class Desktop_NetworkDeviceButton : Desktop_WindowElement
     int UIElementIndex;
     static Sprite defaultSprite;
 
-    static List<Desktop_NetworkDeviceButton> buttonPool = new List<Desktop_NetworkDeviceButton>();
+    static readonly List<Desktop_NetworkDeviceButton> buttonPool = new List<Desktop_NetworkDeviceButton>();
     static int ButtonCount = 0;
     static Desktop_NetworkDeviceButton buttonPrefabStatic;
     static RectTransform root;
@@ -44,7 +44,6 @@ public class Desktop_NetworkDeviceButton : Desktop_WindowElement
 
     public static void ResetButtons()
     {
-        //TODO: some sort of animation (flyout?) to indicate the button relation
         foreach (Desktop_NetworkDeviceButton button in buttonPool)
         {
             button.gameObject.SetActive(false);

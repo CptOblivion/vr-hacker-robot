@@ -92,7 +92,6 @@ public class Desktop_ListButton : MonoBehaviour
 
     public void SetActiveButton()
     {
-        //TODO: pop button transform out like a folder tab
         button.transform.localPosition = new Vector3(inactiveTabOffset, 0);
         button.enabled = false;
         image.color = activeColor;

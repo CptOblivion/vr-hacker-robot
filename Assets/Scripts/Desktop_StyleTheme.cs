@@ -6,6 +6,9 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "Desktop_Style Theme_", menuName = "ScriptableObjects/Desktop_Style Theme", order = 1000)]
 public class Desktop_StyleTheme : ScriptableObject
 {
+    public Color WindowTitlebarColorActive;
+    public Color WindowTitlebarColorInactive;
+
     public Sprite windowCloseButton;
     public Sprite windowMinimizeButton;
 

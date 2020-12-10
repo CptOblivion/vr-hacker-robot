@@ -64,8 +64,7 @@ public class InverseKinematics : MonoBehaviour
             else
             {
                 Quaternion ShoulderTargetRotation;
-                Vector3 UpVec = Vector3.up;
-                if (FlipPole) UpVec = UpVec * -1;
+                Vector3 UpVec = FlipPole? Vector3.down: Vector3.up;
 
                 ShoulderTargetRotation = Quaternion.LookRotation(TargetVector, UpVec); //TODO: consider joint's rest position when determining "up"
                 float factor = ShoulderWeights[0] * Mathf.Clamp01(TargetVector.magnitude / MaxLength);

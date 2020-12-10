@@ -4,13 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     //TODO: split window root and window element into separate classes
     //TODO: organize all these properties
     enum AnimState { Opening, Open, Closing, Minimizing, Expanding}
     AnimState animState = AnimState.Opening;
-    public static Vector2 DesktopSpace = new Vector2(1920, 1016); //TODO: get this algorithmically based on the desktop size
     //TODO: allow multi-edit
     //TODO: figure out alphaHitTestMinimumThreshold and 9-sliced sprites (currently doesn't work)
     public bool AlphaHitTest = false;
@@ -19,18 +18,17 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
     public bool CloseToTaskbar = false;
     public bool Resizable = false;
     public Vector2 MinSize = Vector2.zero;
-    //TODO: reference the style scriptable instead
-    public Desktop_StyleTheme theme;
     public Sprite appIcon;
     public string AppName;
 
     bool PointerInWindow = false;
     Vector2 MousePositionLast;
-    bool Resizing = false;
+    [HideInInspector]
+    public bool Resizing = false;
     Vector2Int ResizeDirection;
-    Vector2 ResizeOrigin;
-    Vector2 ResizeOffset;
-
+    Vector2 ResizeOriginalEdges = Vector2.zero;
+    Vector2 DesktopMin = new Vector2(0, -1016);
+    Vector2 DesktopMax = new Vector2(1920, 0);
 
     RectTransform rect;
 
@@ -67,18 +65,17 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
             titleBar.title.text = AppName;
             if (CloseToTaskbar)
             {
-                titleBar.stowButton.GetComponent<Image>().sprite = theme.windowMinimizeButton;
+                titleBar.stowButton.GetComponent<Image>().sprite = Desktop_Desktop.currentTheme.windowMinimizeButton;
                 minimizedButton = Desktop_MinimizedButton.AddMinimizedButton(minimizedPrefab, this);
             }
             else
             {
-                titleBar.stowButton.GetComponent<Image>().sprite = theme.windowCloseButton;
+                titleBar.stowButton.GetComponent<Image>().sprite = Desktop_Desktop.currentTheme.windowCloseButton;
             }
             titleBar.stowButton.onClick.AddListener(Program_Stow);
         }
 
-        RectTransform rectTransform = (RectTransform)transform;
-        TargetSize = new Vector2(rectTransform.rect.width, rectTransform.rect.height);
+        TargetSize = rect.rect.size;
         canvasGroup = gameObject.AddComponent<CanvasGroup>();
         canvasGroup.interactable = false;
 
@@ -94,6 +91,11 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
         {
             gameObject.SetActive(false);
         }
+        else
+        {
+            FocusWindow();
+        }
+        Desktop_Desktop.current.OnThemeChanged += UpdateTheme;
     }
     protected virtual void OnEnable()
     {
@@ -143,7 +145,7 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
             if (PointerInWindow && (Vector2)Input.mousePosition != MousePositionLast)
             {
                 MousePositionLast = Input.mousePosition;
-                if (Resizable)
+                if (Resizable && !Resizing)
                 {
                     CheckResizeStart(MousePositionLast);
                 }
@@ -153,6 +155,7 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
 
     protected virtual void OnDestroy()
     {
+        Desktop_Desktop.current.OnThemeChanged -= UpdateTheme;
         if (minimizedButton)
         {
             Destroy(minimizedButton.gameObject);
@@ -307,44 +310,87 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
     public virtual void OnPointerDown(PointerEventData eventData)
     {
         FocusWindow();
+        BeginResize(eventData);
+    }
+    public virtual void OnDrag(PointerEventData eventData)
+    {
+        if (Resizing)
+        {
+            Vector2 delta = eventData.position - eventData.pressPosition;
+            delta = new Vector2(delta.x / transform.lossyScale.x, delta.y / transform.lossyScale.y);
+            ResizeWindowFromEdge(delta);
+        }
+    }
+    public virtual void OnEndDrag(PointerEventData eventData)
+    {
+        if (Resizing)
+        {
+            Resizing = false;
+            if (!PointerInWindow)
+            {
+                Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.pointer);
+            }
+        }
+    }
+    public void BeginResize(PointerEventData eventData)
+    {
         if (Resizable)
         {
+            //TODO: store the original rect and use cursor delta from eventData.pressPosition, so cursor doesn't desync with press position relative to the window edge when scaling is capped
             ResizeDirection = CheckResizeStart(eventData.position);
-            Resizing = true;
-            ResizeOrigin = eventData.position;
-            //TODO: set resizeOffset (eg if the cursor is 1 pixel inside of the left edge, keep track of that)
+            if (ResizeDirection.magnitude != 0)
+            {
+                ResizeOriginalEdges.x = ResizeDirection.x < 0 ? rect.offsetMin.x : rect.offsetMax.x;
+                ResizeOriginalEdges.y = ResizeDirection.y < 0 ? rect.offsetMin.y : rect.offsetMax.y;
+                Resizing = true;
+            }
         }
     }
 
-    public virtual void OnDrag(PointerEventData eventData)
+    void ResizeWindowFromEdge(Vector2 delta)
     {
+        //TODO: clip scaling if it tries to go out of the desktop
+        if (ResizeDirection.x < 0)
+        {
+            rect.offsetMin = new Vector2(Mathf.Min(ResizeOriginalEdges.x + delta.x, rect.offsetMax.x - MinSize.x), rect.offsetMin.y);
+        }
+        else if (ResizeDirection.x > 0)
+        {
+            rect.offsetMax = new Vector2(Mathf.Max(ResizeOriginalEdges.x + delta.x, rect.offsetMin.x + MinSize.x), rect.offsetMax.y);
+        }
+        if (ResizeDirection.y < 0)
+        {
+            rect.offsetMin = new Vector2(rect.offsetMin.x, Mathf.Min(ResizeOriginalEdges.y + delta.y, rect.offsetMax.y - MinSize.y));
+        }
+        else if (ResizeDirection.y > 0)
+        {
+            rect.offsetMax = new Vector2(rect.offsetMax.x, Mathf.Max(ResizeOriginalEdges.y + delta.y, rect.offsetMin.y + MinSize.y));
+        }
+
+        rect.offsetMin = Vector2.Max(rect.offsetMin, DesktopMin);
+        rect.offsetMax = Vector2.Min(rect.offsetMax, DesktopMax);
+        TargetSize = rect.rect.size;
 
     }
 
-    public virtual void OnEndDrag(PointerEventData eventData)
+    public Vector2Int CheckResizeStart(Vector2 cursorPosition)
     {
-        Resizing = false;
-    }
-    
-
-    Vector2Int CheckResizeStart(Vector2 cursorPosition)
-    {
+        //TODO: separate (larger, triangular) threshold for corners
         Vector2Int output = Vector2Int.zero;
         Desktop_Cursor.CursorStates state = Desktop_Cursor.CursorStates.pointer;
-        float resizeMargin = 4;
-        Vector4 ActualRect = GetActualRect(rect.localPosition);
+        float resizeMargin = 4; //TODO: ensure the margin is at least one pixel
         Vector2 CursorPosition = rect.parent.InverseTransformPoint(cursorPosition);
-        if (CursorPosition.x > ActualRect.x && CursorPosition.x < ActualRect.x + resizeMargin)
+        if (CursorPosition.x > rect.offsetMin.x && CursorPosition.x < rect.offsetMin.x + resizeMargin)
         {
             output.x -= 1;
             state = Desktop_Cursor.CursorStates.dragX;
         }
-        else if (CursorPosition.x < ActualRect.z && CursorPosition.x > ActualRect.z - resizeMargin)
+        else if (CursorPosition.x < rect.offsetMax.x && CursorPosition.x > rect.offsetMax.x - resizeMargin)
         {
             output.x += 1;
             state = Desktop_Cursor.CursorStates.dragX;
         }
-        if (CursorPosition.y > ActualRect.y && CursorPosition.y < ActualRect.y + resizeMargin)
+        if (CursorPosition.y > rect.offsetMin.y && CursorPosition.y < rect.offsetMin.y + resizeMargin)
         {
             output.y -= 1;
             if (output.x == 0)
@@ -356,7 +402,7 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
                 state = Desktop_Cursor.CursorStates.dragXY;
             }
         }
-        else if (CursorPosition.y < ActualRect.w && CursorPosition.y > ActualRect.w - resizeMargin)
+        else if (CursorPosition.y < rect.offsetMax.y && CursorPosition.y > rect.offsetMax.y - resizeMargin)
         {
             output.y += 1;
             if (output.x == 0)
@@ -377,7 +423,7 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
         PointerInWindow = true;
         MousePositionLast = Input.mousePosition;
 
-        if (Resizable)
+        if (Resizable && !Resizing)
         {
             CheckResizeStart(MousePositionLast);
         }
@@ -385,7 +431,7 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
     public virtual void OnPointerExit(PointerEventData eventData)
     {
         PointerInWindow = false;
-        if (Resizable)
+        if (!Resizing)
         {
             Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.pointer);
         }
@@ -420,31 +466,19 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
     /// <param name="ConstrainTop"></param> if false, the window can pass out the top of the viewport (leave true for user inputs, turn off for animations that need to go into the taskbar)
     public void ConstrainPosition(bool ConstrainTop = true)
     {
-        //optionally don't constrain to the top for animations that need to be able to pass into the taskbar
+        //TODO: doesn't factor in anchors properly (EG if anchors are all top right, it'll be happy to stick off the side of the window)
         RectTransform rect = (RectTransform)transform;
         Vector2 NewPos = rect.localPosition;
 
-        Vector4 ActualRect = GetActualRect(NewPos);
-
-        if (ConstrainTop && ActualRect.w> 0)
-            NewPos.y -= ActualRect.w;
-        else if (ActualRect.y < -DesktopSpace.y)
-            NewPos.y -= ActualRect.y - -DesktopSpace.y; //I should just put that in as a plus but it's easier for my dumb brain to think of it as subtracting a negative
-        if (ActualRect.x < 0)
-            NewPos.x -= ActualRect.x;
-        else if (ActualRect.z > DesktopSpace.x)
-            NewPos.x -= ActualRect.z -DesktopSpace.x;
+        if (ConstrainTop && rect.offsetMax.y> DesktopMax.y)
+            NewPos.y -= rect.offsetMax.y - DesktopMax.y;
+        else if (rect.offsetMin.y < DesktopMin.y)
+            NewPos.y -= rect.offsetMin.y - DesktopMin.y;
+        if (rect.offsetMin.x < DesktopMin.x)
+            NewPos.x -= rect.offsetMin.x - DesktopMin.x;
+        else if (rect.offsetMax.x > DesktopMax.x)
+            NewPos.x -= rect.offsetMax.x -DesktopMax.x;
         rect.localPosition = NewPos;
-    }
-    /// <summary>
-    /// returns the rect around the given position (MinX, MinY, MaxX, Max)
-    /// </summary>
-    /// <param name="pos"></param>
-    /// <returns></returns>
-    Vector4 GetActualRect(Vector2 pos)
-    {
-        //TODO: probably doesn't account for scale (test)
-        return new Vector4(pos.x + rect.rect.min.x, pos.y + rect.rect.min.y, pos.x + rect.rect.max.x, pos.y + rect.rect.max.y);
     }
 
     public void FocusWindow()
@@ -477,5 +511,14 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler, IEndDragHandle
     protected virtual void FinishedClosing()
     { 
         gameObject.SetActive(false);
+    }
+
+    protected void UpdateTheme(Desktop_StyleTheme newTheme)
+    {
+        if (titleBar)
+        {
+            titleBar.SetActiveColor(Active == this);
+            titleBar.stowButton.GetComponent<Image>().sprite = CloseToTaskbar ? newTheme.windowMinimizeButton : newTheme.windowCloseButton;
+        }
     }
 }

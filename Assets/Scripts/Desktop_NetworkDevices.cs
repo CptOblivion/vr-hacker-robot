@@ -13,8 +13,6 @@ public class Desktop_NetworkDevices : Desktop_Window
     public RectTransform controlsFrame;
     public Desktop_NetworkDeviceButton deviceButtonPrefab;
 
-    //TODO: add device interface
-    //default device interface is just a toggle button that calls 
 
     protected override void Awake()
     {
@@ -38,14 +36,12 @@ public class Desktop_NetworkDevices : Desktop_Window
         {
             currentDevice = device;
 
-            //TODO: enable/disable, rather than 
             Desktop_NetworkDeviceButton.ResetButtons();
 
             for (int i = 0; i < device.DeviceUI.Length; i++)
             {
                 //TODO: anchored position isn't set on the first frame the button is initialized
                 Desktop_NetworkDeviceButton.AddButton(device, i, (RectTransform)AvailableDevices[device.DeviceID].transform);
-                //Desktop_NetworkDeviceButton.AddButton(device, i, ((RectTransform)AvailableDevices[device.DeviceID].transform).anchoredPosition.y);
             }
         }
     }

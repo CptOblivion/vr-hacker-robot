@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5585f6a9767c29b47940ccc0968cf05d, type: 3}
   m_Name: Desktop_Style Theme_DEFAULT
   m_EditorClassIdentifier: 
+  WindowTitlebarColorActive: {r: 0.41960785, g: 0.7058824, b: 1, a: 1}
+  WindowTitlebarColorInactive: {r: 0.6, g: 0.7176471, b: 0.8392157, a: 1}
   windowCloseButton: {fileID: 21300000, guid: 6379a688fa97fb34c83b6b28a680f2c7, type: 3}
   windowMinimizeButton: {fileID: 21300000, guid: 6c9a4f4205d09f8449085fff9b809cd1, type: 3}
   cursorPointer: {fileID: 21300000, guid: 310fbd01fabe96841b9689cbe254c21a, type: 3}

@@ -4,14 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHandler 
+public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHandler , IBeginDragHandler
 {
-    public Color ColorActive;
-    public Color ColorInactive;
-    Vector2 cursorOffset;
     bool dragging = false;
     public Button stowButton;
     public Text title;
+    Vector2 DragOrigin;
     private void OnEnable()
     {
         transform.SetAsLastSibling(); //draw on top of the rest of the window (at least, initially)
@@ -21,24 +19,38 @@ public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHan
     {
         //TODO: add a check to see if we're resizing instead of moving
         base.OnPointerDown(eventData);
-        cursorOffset = Input.mousePosition - window.transform.position;
-        dragging = true;
+        window.BeginResize(eventData);
+    }
 
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        //TODO: use delta from pressPosition so cursor doesn't desync with window when window is stopped by desktop edge
+        if (!window.Resizing)
+        {
+            dragging = true;
+            DragOrigin = transform.position;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (dragging)
+        if (window.Resizing)
         {
-            RectTransform parent = (RectTransform)window.transform;
-            parent.position = (Vector2)Input.mousePosition - cursorOffset;
+            window.OnDrag(eventData);
+        }
+        else if (dragging)
+        {
+            window.transform.position = DragOrigin + eventData.position - eventData.pressPosition;
             window.ConstrainPosition();
         }
-        //TODO: clip cursor at edge of screen
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (dragging)
+        if (window.Resizing)
+        {
+            window.OnEndDrag(eventData);
+        }
+        else
         {
             dragging = false;
         }
@@ -46,7 +58,7 @@ public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHan
 
     public void SetActiveColor(bool active)
     {
-        GetComponent<Image>().color = active ? ColorActive : ColorInactive; 
+        GetComponent<Image>().color = active ? Desktop_Desktop.currentTheme.WindowTitlebarColorActive : Desktop_Desktop.currentTheme.WindowTitlebarColorInactive; 
     }
 
     public void SetColor(Color color)

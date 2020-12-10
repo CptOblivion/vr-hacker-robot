@@ -79,6 +79,7 @@ public class VRRobitControl : MonoBehaviour
 
     readonly List<DebugLine> tempDebugLines = new List<DebugLine>();
     readonly List<DebugLine> debugLines = new List<DebugLine>();
+    //TODO: move debug lines stuff into its own class
     bool AddDebugLines = false;
 
     void Start()
@@ -526,6 +527,7 @@ public class VRRobitControl : MonoBehaviour
 
     public class DebugLine
     {
+        //TODO: swap with DebugDrawLine so we can see it in VR
         Vector3 start;
         Vector3 end;
         readonly Transform parent;

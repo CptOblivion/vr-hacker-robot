@@ -11,18 +11,22 @@ public class Desktop_Cursor: MonoBehaviour
     static Desktop_Cursor current;
     Image image;
 
-    public Desktop_StyleTheme styleTheme;
     private void Awake()
     {
         current = this;
         image = GetComponent<Image>();
         Cursor.visible = false;
+        Desktop_Desktop.current.OnThemeChanged += UpdateTheme;
     }
     private void Update()
     {
         //transform.position = new Vector3(Input.mousePosition.x / Screen.width * 1920, Input.mousePosition.y / Screen.height * 1080, 0);
         //transform.localPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
         transform.localPosition = transform.parent.InverseTransformPoint(Input.mousePosition);
+    }
+    private void OnDestroy()
+    {
+        Desktop_Desktop.current.OnThemeChanged -= UpdateTheme;
     }
 
     public static void RequestCursor(CursorStates requestedState)
@@ -34,28 +38,33 @@ public class Desktop_Cursor: MonoBehaviour
         DebugDisplay.AddLine(cursorState.ToString());
     }
 
+    void UpdateTheme(Desktop_StyleTheme newTheme)
+    {
+        UpdateCursor();
+    }
+
     void UpdateCursor()
     {
         Cursor.visible = false;
         switch (cursorState)
         {
             case (CursorStates.pointer):
-                image.sprite = styleTheme.cursorPointer;
+                image.sprite = Desktop_Desktop.currentTheme.cursorPointer;
                 break;
             case (CursorStates.hyperlink):
-                image.sprite = styleTheme.cursorHyperlink;
+                image.sprite = Desktop_Desktop.currentTheme.cursorHyperlink;
                 break;
             case (CursorStates.dragX):
-                image.sprite = styleTheme.cursorDragX;
+                image.sprite = Desktop_Desktop.currentTheme.cursorDragX;
                 break;
             case (CursorStates.dragY):
-                image.sprite = styleTheme.cursorDragY;
+                image.sprite = Desktop_Desktop.currentTheme.cursorDragY;
                 break;
             case (CursorStates.dragXY):
-                image.sprite = styleTheme.cursorDragXY;
+                image.sprite = Desktop_Desktop.currentTheme.cursorDragXY;
                 break;
             case (CursorStates.loading):
-                image.sprite = styleTheme.cursorLoading;
+                image.sprite = Desktop_Desktop.currentTheme.cursorLoading;
                 break;
         }
     }

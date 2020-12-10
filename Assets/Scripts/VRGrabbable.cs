@@ -18,7 +18,7 @@ public class VRGrabbable : MonoBehaviour
     public GameObjectEvent OnReleased;
     [HideInInspector]
     public bool isDynamic;
-    public Collider collider;
+    public new Collider collider; //new because monobehavior already has a property named collider, but it's deprecated
 
     int JustGrabbed = 0;
 
