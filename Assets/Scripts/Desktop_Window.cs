@@ -27,8 +27,6 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, 
     public bool Resizing = false;
     Vector2Int ResizeDirection;
     Vector2 ResizeOriginalEdges = Vector2.zero;
-    Vector2 DesktopMin = new Vector2(0, -1016);
-    Vector2 DesktopMax = new Vector2(1920, 0);
 
     RectTransform rect;
 
@@ -316,7 +314,7 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, 
     {
         if (Resizing)
         {
-            Vector2 delta = eventData.position - eventData.pressPosition;
+            Vector2 delta = (eventData.position - eventData.pressPosition);
             delta = new Vector2(delta.x / transform.lossyScale.x, delta.y / transform.lossyScale.y);
             ResizeWindowFromEdge(delta);
         }
@@ -367,8 +365,8 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, 
             rect.offsetMax = new Vector2(rect.offsetMax.x, Mathf.Max(ResizeOriginalEdges.y + delta.y, rect.offsetMin.y + MinSize.y));
         }
 
-        rect.offsetMin = Vector2.Max(rect.offsetMin, DesktopMin);
-        rect.offsetMax = Vector2.Min(rect.offsetMax, DesktopMax);
+        rect.offsetMin = Vector2.Max(rect.offsetMin, Desktop_Desktop.current.DesktopMin);
+        rect.offsetMax = Vector2.Min(rect.offsetMax, Desktop_Desktop.current.DesktopMax);
         TargetSize = rect.rect.size;
 
     }
@@ -470,14 +468,14 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, 
         RectTransform rect = (RectTransform)transform;
         Vector2 NewPos = rect.localPosition;
 
-        if (ConstrainTop && rect.offsetMax.y> DesktopMax.y)
-            NewPos.y -= rect.offsetMax.y - DesktopMax.y;
-        else if (rect.offsetMin.y < DesktopMin.y)
-            NewPos.y -= rect.offsetMin.y - DesktopMin.y;
-        if (rect.offsetMin.x < DesktopMin.x)
-            NewPos.x -= rect.offsetMin.x - DesktopMin.x;
-        else if (rect.offsetMax.x > DesktopMax.x)
-            NewPos.x -= rect.offsetMax.x -DesktopMax.x;
+        if (ConstrainTop && rect.offsetMax.y> Desktop_Desktop.current.DesktopMax.y)
+            NewPos.y -= rect.offsetMax.y - Desktop_Desktop.current.DesktopMax.y;
+        else if (rect.offsetMin.y < Desktop_Desktop.current.DesktopMin.y)
+            NewPos.y -= rect.offsetMin.y - Desktop_Desktop.current.DesktopMin.y;
+        if (rect.offsetMin.x < Desktop_Desktop.current.DesktopMin.x)
+            NewPos.x -= rect.offsetMin.x - Desktop_Desktop.current.DesktopMin.x;
+        else if (rect.offsetMax.x > Desktop_Desktop.current.DesktopMax.x)
+            NewPos.x -= rect.offsetMax.x - Desktop_Desktop.current.DesktopMax.x;
         rect.localPosition = NewPos;
     }
 

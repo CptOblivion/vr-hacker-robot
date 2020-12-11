@@ -10,19 +10,20 @@ public class Desktop_Cursor: MonoBehaviour
     static CursorStates cursorState = CursorStates.pointer;
     static Desktop_Cursor current;
     Image image;
+    public bool HideCursor = true;
 
     private void Awake()
     {
         current = this;
         image = GetComponent<Image>();
-        Cursor.visible = false;
+        if (HideCursor) Cursor.visible = false;
         Desktop_Desktop.current.OnThemeChanged += UpdateTheme;
     }
     private void Update()
     {
         //transform.position = new Vector3(Input.mousePosition.x / Screen.width * 1920, Input.mousePosition.y / Screen.height * 1080, 0);
         //transform.localPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
-        transform.localPosition = transform.parent.InverseTransformPoint(Input.mousePosition);
+        transform.position = Input.mousePosition;
     }
     private void OnDestroy()
     {
@@ -45,7 +46,7 @@ public class Desktop_Cursor: MonoBehaviour
 
     void UpdateCursor()
     {
-        Cursor.visible = false;
+        if (HideCursor) Cursor.visible = false;
         switch (cursorState)
         {
             case (CursorStates.pointer):
