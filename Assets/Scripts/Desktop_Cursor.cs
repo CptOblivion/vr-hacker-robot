@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Desktop_Cursor: MonoBehaviour
 {
-    public enum CursorStates { pointer, hyperlink, dragX, dragY, dragXY, loading}
+    public enum CursorStates { pointer, hyperlink, dragX, dragY, dragDiagonal1, dragDiagonal2, loading}
     static CursorStates cursorState = CursorStates.pointer;
     static Desktop_Cursor current;
     Image image;
@@ -61,8 +61,11 @@ public class Desktop_Cursor: MonoBehaviour
             case (CursorStates.dragY):
                 image.sprite = Desktop_Desktop.currentTheme.cursorDragY;
                 break;
-            case (CursorStates.dragXY):
-                image.sprite = Desktop_Desktop.currentTheme.cursorDragXY;
+            case (CursorStates.dragDiagonal1):
+                image.sprite = Desktop_Desktop.currentTheme.cursorDragDiagonal1;
+                break;
+            case (CursorStates.dragDiagonal2):
+                image.sprite = Desktop_Desktop.currentTheme.cursorDragDiagonal2;
                 break;
             case (CursorStates.loading):
                 image.sprite = Desktop_Desktop.currentTheme.cursorLoading;

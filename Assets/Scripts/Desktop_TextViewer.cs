@@ -36,6 +36,7 @@ public class Desktop_TextViewer : Desktop_Window
             documents.Add(doc, docButton);
             docButton.Setup(doc);
         }
+        //TODO: scroll the document vertical scrolling back to top
         current.ExpandWindow();
         current.FocusWindow();
         UpdateCurrentButton(documents[doc]);

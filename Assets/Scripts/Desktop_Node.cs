@@ -106,6 +106,10 @@ public class Desktop_Node : MonoBehaviour
             }
             else
             {
+                //TODO: flyout animation where node leaf button shoots over to (currently invisible, newly spawned) tab button in corresponding window
+                //  this will require breaking the button adding function into a separate one from the one that sets the active camera/document/etc
+                //  then we can add the button, set the animation target, add the dummy anim button, set the animation, add the activate function to the animation onfinished event
+
                 if (leaf.leafType == Node_Leaf.LeafTypes.NetworkDevice)
                 {
                     if (!NetworkDevice.ActivateDevice(leaf.DeviceID))

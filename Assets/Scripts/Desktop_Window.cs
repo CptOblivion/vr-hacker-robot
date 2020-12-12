@@ -20,6 +20,8 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, 
     public Vector2 MinSize = Vector2.zero;
     public Sprite appIcon;
     public string AppName;
+    public float ResizeMargin = 4;
+    public float ResizeCorner = 8;
 
     bool PointerInWindow = false;
     Vector2 MousePositionLast;
@@ -376,47 +378,61 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, 
 
     public Vector2Int CheckResizeStart(Vector2 cursorPosition)
     {
-        //TODO: separate (larger, triangular) threshold for corners
-        Vector2Int output = Vector2Int.zero;
-        Desktop_Cursor.CursorStates state = Desktop_Cursor.CursorStates.pointer;
-        float resizeMargin = 4; //TODO: ensure the margin is at least one pixel
-        Vector2 CursorPosition = rect.parent.InverseTransformPoint(cursorPosition);
-        if (CursorPosition.x > rect.offsetMin.x && CursorPosition.x < rect.offsetMin.x + resizeMargin)
+        //TODO: ensure the margin is at least one pixel
+        //TODO: there's probably a cleaner and more generalized way to do this than eight if/return checks
+        Vector2 localCursorPosition = rect.parent.InverseTransformPoint(cursorPosition);
+
+        if (localCursorPosition.x + localCursorPosition.y > rect.offsetMax.x + rect.offsetMax.y - ResizeCorner)
         {
-            output.x -= 1;
-            state = Desktop_Cursor.CursorStates.dragX;
+            //top right corner
+            Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.dragDiagonal1);
+            return Vector2Int.one;
         }
-        else if (CursorPosition.x < rect.offsetMax.x && CursorPosition.x > rect.offsetMax.x - resizeMargin)
+        if (localCursorPosition.x + localCursorPosition.y < rect.offsetMin.x + rect.offsetMin.y + ResizeCorner)
         {
-            output.x += 1;
-            state = Desktop_Cursor.CursorStates.dragX;
+            //bottom left corner
+            Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.dragDiagonal1);
+            return Vector2Int.one * -1;
         }
-        if (CursorPosition.y > rect.offsetMin.y && CursorPosition.y < rect.offsetMin.y + resizeMargin)
+        if (localCursorPosition.x - localCursorPosition.y > rect.offsetMax.x - rect.offsetMin.y - ResizeCorner)
         {
-            output.y -= 1;
-            if (output.x == 0)
-            {
-                state = Desktop_Cursor.CursorStates.dragY;
-            }
-            else
-            {
-                state = Desktop_Cursor.CursorStates.dragXY;
-            }
+            //bottom right corner
+            Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.dragDiagonal2);
+            return new Vector2Int(1, -1);
         }
-        else if (CursorPosition.y < rect.offsetMax.y && CursorPosition.y > rect.offsetMax.y - resizeMargin)
+        if (localCursorPosition.x - localCursorPosition.y < rect.offsetMin.x - rect.offsetMax.y + ResizeCorner)
         {
-            output.y += 1;
-            if (output.x == 0)
-            {
-                state = Desktop_Cursor.CursorStates.dragY;
-            }
-            else
-            {
-                state = Desktop_Cursor.CursorStates.dragXY;
-            }
+            //top left corner
+            Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.dragDiagonal2);
+            return new Vector2Int(-1, 1); ;
         }
-        Desktop_Cursor.RequestCursor(state);
-        return output;
+        if (localCursorPosition.x > rect.offsetMin.x && localCursorPosition.x < rect.offsetMin.x + ResizeMargin)
+        {
+            //left edge
+            Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.dragX);
+            return new Vector2Int(-1,0);
+        }
+        else if (localCursorPosition.x < rect.offsetMax.x && localCursorPosition.x > rect.offsetMax.x - ResizeMargin)
+        {
+            //right edge
+            Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.dragX);
+            return new Vector2Int(1, 0);
+        }
+        else if (localCursorPosition.y < rect.offsetMax.y && localCursorPosition.y > rect.offsetMax.y - ResizeMargin)
+        {
+            //top edge
+            Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.dragY);
+            return new Vector2Int(0, 1);
+        }
+        if (localCursorPosition.y > rect.offsetMin.y && localCursorPosition.y < rect.offsetMin.y + ResizeMargin)
+        {
+            //bottom edge
+            Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.dragY);
+            return new Vector2Int(0, -1);
+        }
+        Desktop_Cursor.RequestCursor(Desktop_Cursor.CursorStates.pointer);
+        return Vector2Int.zero;
+
     }
 
     public virtual void OnPointerEnter(PointerEventData eventData)

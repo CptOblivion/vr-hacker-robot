@@ -17,6 +17,8 @@ public class Desktop_StyleTheme : ScriptableObject
     public Sprite cursorDragX;
     public Sprite cursorDragY;
     public Sprite cursorDragXY;
+    public Sprite cursorDragDiagonal1;
+    public Sprite cursorDragDiagonal2;
     public Sprite cursorLoading;
     //TODO: colors for buttons and stuff
     //TODO: fonts

@@ -206,6 +206,8 @@ MonoBehaviour:
   MinSize: {x: 0, y: 0}
   appIcon: {fileID: 0}
   AppName: UNTITLED APPLICATION
+  ResizeMargin: 4
+  ResizeCorner: 25
   Resizing: 0
   minimizedPrefab: {fileID: 8170051949817875509, guid: 9e07bd2d1344de54dafac6bfc6f6da29, type: 3}
   titleBar: {fileID: 0}
