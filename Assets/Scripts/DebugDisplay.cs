@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.Rendering;
-using UnityEngine.UI;
+//using UnityEngine.UI;
+using TMPro;
 
 public class DebugDisplay : MonoBehaviour
 {
@@ -10,11 +11,12 @@ public class DebugDisplay : MonoBehaviour
     static readonly int MaxLines = 5;
     static string text = "";
     //public Camera outputCam;
-    Text textOb;
+
+    TMP_Text textOb;
 
     private void Start()
     {
-        textOb = GetComponent<Text>();
+        textOb = GetComponent<TMP_Text>();
     }
 
     /*

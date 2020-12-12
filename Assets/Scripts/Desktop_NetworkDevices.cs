@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Desktop_NetworkDevices : Desktop_Window
 {
@@ -9,7 +10,7 @@ public class Desktop_NetworkDevices : Desktop_Window
     static NetworkDevice currentDevice;
     static Desktop_NetworkDevices current;
     public Desktop_ListButton buttonPrefab;
-    public RectTransform buttonListFrame;
+    public ScrollRect buttonList;
     public RectTransform controlsFrame;
     public Desktop_NetworkDeviceButton deviceButtonPrefab;
 
@@ -27,7 +28,7 @@ public class Desktop_NetworkDevices : Desktop_Window
         current.FocusWindow();
         if (!AvailableDevices.ContainsKey(device.DeviceID))
         {
-            Desktop_ListButton deviceButton = Instantiate(current.buttonPrefab.gameObject, current.buttonListFrame).GetComponent<Desktop_ListButton>();
+            Desktop_ListButton deviceButton = Instantiate(current.buttonPrefab.gameObject, current.buttonList.content).GetComponent<Desktop_ListButton>();
             AvailableDevices.Add(device.DeviceID, deviceButton);
             deviceButton.Setup(device);
             UpdateActiveButton(deviceButton);

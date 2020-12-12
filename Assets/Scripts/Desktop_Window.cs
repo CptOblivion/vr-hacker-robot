@@ -73,7 +73,6 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, 
             titleBar.stowButton.onClick.AddListener(Program_Stow);
         }
 
-        TargetSize = rect.rect.size;
         canvasGroup = gameObject.AddComponent<CanvasGroup>();
         canvasGroup.interactable = false;
 
@@ -94,6 +93,10 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, 
             FocusWindow();
         }
         Desktop_Desktop.current.OnThemeChanged += UpdateTheme;
+
+        rect.offsetMin = Desktop_Desktop.SnapCanvasToPixel(rect.offsetMin);
+        rect.offsetMax = Desktop_Desktop.SnapCanvasToPixel(rect.offsetMax);
+        TargetSize = rect.rect.size;
     }
     protected virtual void OnEnable()
     {
@@ -365,8 +368,8 @@ public class Desktop_Window : MonoBehaviour, IPointerDownHandler ,IDragHandler, 
             rect.offsetMax = new Vector2(rect.offsetMax.x, Mathf.Max(ResizeOriginalEdges.y + delta.y, rect.offsetMin.y + MinSize.y));
         }
 
-        rect.offsetMin = Vector2.Max(rect.offsetMin, Desktop_Desktop.current.DesktopMin);
-        rect.offsetMax = Vector2.Min(rect.offsetMax, Desktop_Desktop.current.DesktopMax);
+        rect.offsetMin = Desktop_Desktop.SnapCanvasToPixel(Vector2.Max(rect.offsetMin, Desktop_Desktop.current.DesktopMin));
+        rect.offsetMax = Desktop_Desktop.SnapCanvasToPixel(Vector2.Min(rect.offsetMax, Desktop_Desktop.current.DesktopMax));
         TargetSize = rect.rect.size;
 
     }

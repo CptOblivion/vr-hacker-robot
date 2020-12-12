@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Desktop_TextViewer : Desktop_Window
 {
@@ -10,9 +11,9 @@ public class Desktop_TextViewer : Desktop_Window
     static Desktop_TextViewer current;
     static Desktop_ListButton currentButton;
 
-    public Transform docListContainer;
-    public Text docTitle;
-    public Text docContents;
+    public ScrollRect DocList;
+    public TMP_Text docTitle;
+    public TMP_Text docContents;
     public Desktop_ListButton docListButtonPrefab;
 
     public Color SelectedButton;
@@ -31,7 +32,7 @@ public class Desktop_TextViewer : Desktop_Window
     {
         if (!documents.ContainsKey(doc))
         {
-            Desktop_ListButton docButton = Instantiate(current.docListButtonPrefab.gameObject, current.docListContainer.transform).GetComponent<Desktop_ListButton>();
+            Desktop_ListButton docButton = Instantiate(current.docListButtonPrefab.gameObject, current.DocList.content).GetComponent<Desktop_ListButton>();
             documents.Add(doc, docButton);
             docButton.Setup(doc);
         }

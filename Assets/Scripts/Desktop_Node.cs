@@ -34,7 +34,6 @@ public class Desktop_Node : MonoBehaviour
     public Desktop_Node_StyleSet nodeStyle;
 
     RectTransform parentLine;
-    public Transform leafFrameContentsTemp;//TODO: find a better solution than this
     public Node_Leaf[] Leaves;
     bool Revealed = false;
 
@@ -184,7 +183,7 @@ public class Desktop_Node : MonoBehaviour
         for (int i = 0; i < Leaves.Length; i++)
         {
             Node_Leaf leaf = Leaves[i];
-            leaf.button = Instantiate(nodeStyle.button_NodeContents_Prefab.gameObject, rootNode.leafFrameContentsTemp).GetComponent<Desktop_ListButton>();
+            leaf.button = Instantiate(nodeStyle.button_NodeContents_Prefab.gameObject, Desktop_Nodemap_Background.current.nodeLeafList.content).GetComponent<Desktop_ListButton>();
             Sprite icon = nodeStyle.LeafIcon_Unknown;
             switch (leaf.leafIcon)
             {
@@ -296,9 +295,9 @@ public class Desktop_Node : MonoBehaviour
 
         Transform parent = rootNode.transform.parent.parent.GetComponent<Desktop_WindowElement>().window.transform;
 
-        for (int i = rootNode.leafFrameContentsTemp.childCount; i > 0 ; i--)
+        for (int i = Desktop_Nodemap_Background.current.nodeLeafList.content.childCount; i > 0 ; i--)
         {
-            RectTransform t = (RectTransform)rootNode.leafFrameContentsTemp.GetChild(i-1);
+            RectTransform t = (RectTransform)Desktop_Nodemap_Background.current.nodeLeafList.content.GetChild(i-1);
             t.SetParent(parent);
             t.GetComponentInChildren<Button>().interactable = false;
             Desktop_Anim anim = t.gameObject.AddComponent<Desktop_Anim>();
@@ -344,7 +343,7 @@ public class Desktop_Node : MonoBehaviour
         Vector4 RootBounds = new Vector4(corners[1].x, corners[1].y, corners[3].x, corners[3].y);
         Vector4 Bounds = RootBounds;//left, top, right, bottom
         Vector2 RootOffset = Vector2.zero;
-        Vector2 CanvasScale = rootNode.GetComponentInParent<Canvas>().transform.localScale;
+        Vector2 CanvasScale = rootNode.GetComponentInParent<Canvas>().transform.lossyScale;
         if (!OnlyRoot)
         {
             foreach (Desktop_Node node in rootNode.GetComponentsInChildren<Desktop_Node>())

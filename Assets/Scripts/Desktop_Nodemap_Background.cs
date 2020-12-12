@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Desktop_Nodemap_Background : Desktop_WindowElement, IPointerDownHandler
 {
-
+    public ScrollRect nodeLeafList;
     public static Desktop_Nodemap_Background current;
     static float ShutdownDelay = 0;
     static float UpdateBoundsDelay = 0;

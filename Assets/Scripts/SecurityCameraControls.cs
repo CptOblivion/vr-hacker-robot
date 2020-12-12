@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class SecurityCameraControls : Desktop_Window //TODO: inherit from Desktop_Window
 {
     //TODO: override MinimizeWindow, disable security camera when minimizing (to save rendering overhead)
-    public Transform cameraListFrame;
+    public ScrollRect cameraList;
     public GameObject camDisplay;
     public Desktop_ListButton buttonPrefab;
     static SecurityCameraControls current;
@@ -31,7 +31,7 @@ public class SecurityCameraControls : Desktop_Window //TODO: inherit from Deskto
         {
             if (!current.activeCameras.ContainsKey(securityCamera))
             {
-                Desktop_ListButton camButton = Instantiate(current.buttonPrefab.gameObject, current.cameraListFrame).GetComponent<Desktop_ListButton>();
+                Desktop_ListButton camButton = Instantiate(current.buttonPrefab.gameObject, current.cameraList.content).GetComponent<Desktop_ListButton>();
                 current.activeCameras.Add(securityCamera, camButton);
                 camButton.Setup(securityCamera);
             }

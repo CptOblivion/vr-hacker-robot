@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69d1949e0baec54fbfa1b252edea349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 7147440809109975320}
+  text: {fileID: 6251627234257992033}
   button: {fileID: 9060580790203071175}
   icon: {fileID: 6474670750384453119}
   canvasGroup: {fileID: 0}
+  rect: {fileID: 0}
 --- !u!1 &7067787828508315512
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,6 +220,30 @@ PrefabInstance:
       propertyPath: m_FontData.m_MinSize
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7046181840746860247, guid: 3bc13232c58828c40aabc356248645de, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046181840746860247, guid: 3bc13232c58828c40aabc356248645de, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046181840746860247, guid: 3bc13232c58828c40aabc356248645de, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046181840746860247, guid: 3bc13232c58828c40aabc356248645de, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046181840746860247, guid: 3bc13232c58828c40aabc356248645de, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046181840746860247, guid: 3bc13232c58828c40aabc356248645de, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8527141385600082610, guid: 3bc13232c58828c40aabc356248645de, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -246,14 +271,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7147440809109975320 stripped
+--- !u!114 &6251627234257992033 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6952468710766368713, guid: 3bc13232c58828c40aabc356248645de, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6165097075098050480, guid: 3bc13232c58828c40aabc356248645de, type: 3}
   m_PrefabInstance: {fileID: 237827633442596561}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

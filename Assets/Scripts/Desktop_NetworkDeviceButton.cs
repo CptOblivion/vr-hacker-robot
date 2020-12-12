@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Desktop_NetworkDeviceButton : Desktop_WindowElement
 {
     #region user variables
-    public Text textObject;
+    public TMP_Text textObject;
     public float IntroTime = .2f;
     #endregion
 

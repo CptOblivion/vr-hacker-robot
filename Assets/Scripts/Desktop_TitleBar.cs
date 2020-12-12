@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHandler , IBeginDragHandler
 {
     bool dragging = false;
     public Button stowButton;
-    public Text title;
+    public TMP_Text title;
     Vector2 DragOrigin;
     private void OnEnable()
     {
@@ -28,7 +29,7 @@ public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHan
         if (!window.Resizing)
         {
             dragging = true;
-            DragOrigin = transform.position;
+            DragOrigin = Desktop_Desktop.SnapGlobalToPixel(transform.position);
         }
     }
 
@@ -40,7 +41,7 @@ public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHan
         }
         else if (dragging)
         {
-            window.transform.position = DragOrigin + eventData.position - eventData.pressPosition;
+            window.transform.position = DragOrigin + Desktop_Desktop.SnapGlobalToPixel(eventData.position) - Desktop_Desktop.SnapGlobalToPixel(eventData.pressPosition);
             window.ConstrainPosition();
         }
     }

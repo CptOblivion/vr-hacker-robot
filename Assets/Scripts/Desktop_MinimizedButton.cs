@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Desktop_MinimizedButton : MonoBehaviour
 {
-    public Text text;
+    public TMP_Text text;
     public Button button;
     public Image icon;
     [HideInInspector]

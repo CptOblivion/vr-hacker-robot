@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Desktop_PINPad : Desktop_Window
 {
@@ -11,8 +12,8 @@ public class Desktop_PINPad : Desktop_Window
     static int TargetPIN = -1;
     static int CurrentPIN = -1;
     static readonly int MaxPIN = 100000; //this number should be a 1, followed by 0s, filling the number of digits available for the pin
-    public Text EnteredPINReadout;
-    public Text WindowTitle;
+    public TMP_Text EnteredPINReadout;
+    public TMP_Text WindowTitle;
     public Color ColorWrongPassword;
     static int Leaf;
     bool Success = true;

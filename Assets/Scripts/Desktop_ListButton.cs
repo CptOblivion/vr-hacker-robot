@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Desktop_ListButton : MonoBehaviour
 {
     public Button button;
     public Image image;
-    public Text text;
+    public TMP_Text text;
     public CanvasGroup group;
     public Image sprite;
     SecurityCamera cam;
@@ -17,7 +18,6 @@ public class Desktop_ListButton : MonoBehaviour
     int nodeLeafIndex;
     public float inactiveTabOffset = 16;
     Desktop_ListButton endButton;
-
 
     public Color activeColor;
     public Color inactiveColor;

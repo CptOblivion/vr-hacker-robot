@@ -19,11 +19,11 @@ public class Desktop_Cursor: MonoBehaviour
         if (HideCursor) Cursor.visible = false;
         Desktop_Desktop.current.OnThemeChanged += UpdateTheme;
     }
-    private void Update()
+    private void LateUpdate()
     {
         //transform.position = new Vector3(Input.mousePosition.x / Screen.width * 1920, Input.mousePosition.y / Screen.height * 1080, 0);
         //transform.localPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
-        transform.position = Input.mousePosition;
+        transform.position = Desktop_Desktop.SnapGlobalToPixel(Input.mousePosition);
     }
     private void OnDestroy()
     {
