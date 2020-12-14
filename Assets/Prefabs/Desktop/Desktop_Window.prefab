@@ -93,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AlphaHitTest: 0
   window: {fileID: 0}
+  dragging: 0
   stowButton: {fileID: 751458244580841658}
   title: {fileID: 3283141553928669532}
 --- !u!1 &110246968860572370
@@ -206,8 +207,6 @@ MonoBehaviour:
   MinSize: {x: 0, y: 0}
   appIcon: {fileID: 0}
   AppName: UNTITLED APPLICATION
-  ResizeMargin: 4
-  ResizeCorner: 25
   content: {fileID: 2809954686226901376}
   Resizing: 0
   minimizedPrefab: {fileID: 8170051949817875509, guid: 9e07bd2d1344de54dafac6bfc6f6da29, type: 3}
@@ -492,8 +491,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: UNTITLED WINDOW
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 08c444994d63e084a978c33c9b17bc05, type: 2}
-  m_sharedMaterial: {fileID: -8250645311451212980, guid: 08c444994d63e084a978c33c9b17bc05, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0ce0ddbc0f4f403438997761078ca2e1, type: 2}
+  m_sharedMaterial: {fileID: 0}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

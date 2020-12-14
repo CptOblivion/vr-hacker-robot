@@ -15,9 +15,9 @@ MonoBehaviour:
   SelectedColor: {r: 0.5176471, g: 1, b: 0.59607846, a: 1}
   DeselectedColor: {r: 1, g: 1, b: 1, a: 1}
   PasswordFail: {r: 0.7176471, g: 0.24705882, b: 0.24705882, a: 1}
-  UnvisitedNode: {fileID: 21300000, guid: bac7f380f436a5846a584bfa24e8dea8, type: 3}
-  EmptyNode: {fileID: 21300000, guid: 1a609a372d54f4442b94a179127059f3, type: 3}
-  ExhaustedNode: {fileID: 21300000, guid: c7a020dc1617d324dae64af0fb36be1c, type: 3}
+  UnvisitedNode: {fileID: 21300000, guid: f16f84a7565014741b00286ac66d0917, type: 3}
+  EmptyNode: {fileID: 21300000, guid: 068b3e1b3073aba4eb6fafb01c69ed58, type: 3}
+  ExhaustedNode: {fileID: 21300000, guid: 5bd9a69cc7982e34f831c97262cc6a97, type: 3}
   NodeAnimFlyoutTime: 0.15
   ButtonAnimFlyoutTime: 0.25
   ButtonAnimFlyoutFirstDelay: 0.1
@@ -26,8 +26,8 @@ MonoBehaviour:
   AlreadyUsedLeaf: {r: 0.6392157, g: 0.78431374, b: 0.7921569, a: 1}
   button_Node_Prefab: {fileID: 5387126982156216422, guid: ff91250ac95217940bd35c6127c5f508, type: 3}
   button_NodeContents_Prefab: {fileID: 8363840981722386528, guid: b57e6d0a460e984478ecd1496fdf12e0, type: 3}
-  LeafIcon_Unknown: {fileID: 21300000, guid: c2c68d46731450d4f91078454c9e3941, type: 3}
-  LeafIcon_Generic_IOT: {fileID: 21300000, guid: 53120fbe590a1ea42b8e6ca18608160a, type: 3}
-  LeafIcon_Camera: {fileID: 21300000, guid: fb01d4a0c30b9d842920175fdc3988b0, type: 3}
-  LeafIcon_Doc: {fileID: 21300000, guid: 63f1959ebdf89494896187aa33cd9cfa, type: 3}
+  LeafIcon_Unknown: {fileID: 21300000, guid: 15d716a646bfbbf4cb5d9bc15a82bf0d, type: 3}
+  LeafIcon_Generic_IOT: {fileID: 21300000, guid: e086afb5b7a5711469ff6f33fcfdaa05, type: 3}
+  LeafIcon_Camera: {fileID: 21300000, guid: eaaef7905a0db2645a9134c6008dda64, type: 3}
+  LeafIcon_Doc: {fileID: 21300000, guid: cc0948b2a4027b04dbbe81a460d9adc7, type: 3}
   parentLineMat: {fileID: 2100000, guid: 4ea9b46f41f7f3c4cabc9ca05ab43951, type: 2}

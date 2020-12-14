@@ -69,7 +69,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 17c1b6260e8bbfc428604c5809a10af7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b228a8c6225b7a2479ac4d1ebf73c9eb, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -215,8 +215,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 08c444994d63e084a978c33c9b17bc05, type: 2}
-  m_sharedMaterial: {fileID: -8250645311451212980, guid: 08c444994d63e084a978c33c9b17bc05, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0ce0ddbc0f4f403438997761078ca2e1, type: 2}
+  m_sharedMaterial: {fileID: -5138755576754549056, guid: 0ce0ddbc0f4f403438997761078ca2e1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -317,7 +317,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -774, y: -435}
-  m_SizeDelta: {x: 100, y: 30}
+  m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5428527376364423638
 MonoBehaviour:
