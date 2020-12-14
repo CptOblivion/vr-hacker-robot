@@ -30,3 +30,4 @@ MonoBehaviour:
   LeafIcon_Generic_IOT: {fileID: 21300000, guid: 53120fbe590a1ea42b8e6ca18608160a, type: 3}
   LeafIcon_Camera: {fileID: 21300000, guid: fb01d4a0c30b9d842920175fdc3988b0, type: 3}
   LeafIcon_Doc: {fileID: 21300000, guid: 63f1959ebdf89494896187aa33cd9cfa, type: 3}
+  parentLineMat: {fileID: 2100000, guid: 4ea9b46f41f7f3c4cabc9ca05ab43951, type: 2}

@@ -317,11 +317,11 @@ public class Desktop_Node : MonoBehaviour
         parentLine = tempLine.gameObject.AddComponent<RectTransform>();
         parentLine.localPosition = Vector2.zero;
         parentLine.SetAsFirstSibling();
-        parentLine.pivot = new Vector2(0, .5f);
-        parentLine.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1);
-        parentLine.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 3);
-        parentLine.gameObject.AddComponent<RawImage>().color = Color.black;
-        parentLine.SetAsFirstSibling();
+        parentLine.pivot = new Vector2(.5f, 0);
+        parentLine.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 8);
+        parentLine.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1);
+        RawImage rawImage = parentLine.gameObject.AddComponent<RawImage>();
+        rawImage.material = nodeStyle.parentLineMat;
         UpdateParentLine();
     }
     void UpdateParentLine()
@@ -332,8 +332,8 @@ public class Desktop_Node : MonoBehaviour
             {
                 //TODO: do this in the editor, too
                 Vector2 lineVec = -transform.localPosition;
-                parentLine.localScale = new Vector3(lineVec.magnitude, 1, 1);
-                parentLine.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(lineVec[1], lineVec[0]) * Mathf.Rad2Deg);
+                parentLine.localScale = new Vector3(1, lineVec.magnitude, 1);
+                parentLine.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(lineVec[1], lineVec[0]) * Mathf.Rad2Deg - 90);
             }
         }
     }

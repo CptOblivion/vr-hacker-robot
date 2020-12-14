@@ -10,6 +10,7 @@
 		_Intensity ("Grid Intensity", Range(0,1)) = 1
 		_gridToggle ("Grid algorithm toggle (REMEMBER TO REMOVE)", Range(0,1)) = 1
 		_gridScale ("Pixel Grid Scale", float) = 1
+		_borderFade("Border Fade", Range(0,100)) = 4
     }
     SubShader
     {
@@ -54,6 +55,7 @@
 			half _Barrel;
 			int _gridToggle;
 			half _gridScale;
+			half _borderFade;
 
             fixed4 frag (v2f i) : SV_Target
             {
@@ -68,11 +70,10 @@
 
 				half dist = length(i.uv);
 				i.uv /= (1+ _Barrel * dist * dist);
-				half border = 4;
 
 				//screen borders
-				half clip = smoothstep(1, 1-pixelSize.x * border, abs(i.uv[0]));
-				clip *= smoothstep(1, 1-pixelSize.y * border, abs(i.uv[1]));
+				half clip = smoothstep(1, 1-pixelSize.x * _borderFade, abs(i.uv[0]));
+				clip *= smoothstep(1, 1-pixelSize.y * _borderFade, abs(i.uv[1]));
 
 				i.uv = i.uv/2+.5; //back to corner coordinates
 

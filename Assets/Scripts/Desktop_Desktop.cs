@@ -9,6 +9,8 @@ public class Desktop_Desktop : MonoBehaviour, IPointerDownHandler
     public Desktop_StyleTheme DefaultTheme;
     public static Desktop_StyleTheme currentTheme;
     public static int pixelScale;
+    public float Window_ResizeThreshold_Edge = 4;
+    public float Window_ResizeThreshold_Corner = 25;
 
     float GlobalToPixel = 1;
 

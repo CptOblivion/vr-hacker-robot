@@ -77,6 +77,8 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     - _Zoom: 1
+    - _borderFade: 5
+    - _borderFade2: -0.05
     - _gridScale: 1
     - _gridToggle: 1
     m_Colors:

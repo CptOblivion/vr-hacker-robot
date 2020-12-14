@@ -5,9 +5,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHandler , IBeginDragHandler
+public class Desktop_TitleBar : Desktop_WindowElement, IPointerUpHandler, IDragHandler, IEndDragHandler , IBeginDragHandler
 {
-    bool dragging = false;
+    public bool dragging = false;
     public Button stowButton;
     public TMP_Text title;
     Vector2 DragOrigin;
@@ -21,6 +21,10 @@ public class Desktop_TitleBar : Desktop_WindowElement, IDragHandler, IEndDragHan
         //TODO: add a check to see if we're resizing instead of moving
         base.OnPointerDown(eventData);
         window.BeginResize(eventData);
+    }
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        window.EndDrag();
     }
 
     public void OnBeginDrag(PointerEventData eventData)

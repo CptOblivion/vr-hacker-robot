@@ -32,4 +32,6 @@ public class Desktop_Node_StyleSet : ScriptableObject
     public Sprite LeafIcon_Generic_IOT;
     public Sprite LeafIcon_Camera;
     public Sprite LeafIcon_Doc;
+    
+    public Material parentLineMat;
 }

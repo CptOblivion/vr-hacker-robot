@@ -49,6 +49,10 @@ public class Desktop_MinimizedButton : MonoBehaviour
     void Clicked()
     {
         window.Program_Launch();
+    }
+
+    public void HideButton()
+    {
         button.interactable = false;
         gameObject.SetActive(false);
     }

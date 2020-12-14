@@ -32,7 +32,6 @@ public class Desktop_Node_Editor: Editor
         serializedObject.Update();
         EditorGUILayout.PropertyField(NodeName);
         EditorGUILayout.PropertyField(PIN);
-        EditorGUILayout.PropertyField(leafFrameContentsTemp);
         EditorGUILayout.PropertyField(nodeStyle);
         GUILayout.BeginVertical(EditorStyles.helpBox); //the box itself
         {
