@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ComputerScreen
-  m_Shader: {fileID: 4800000, guid: d2ddd87a75555f4409412013dd3c4f92, type: 3}
+  m_Shader: {fileID: 4800000, guid: 38b78e9b80e07584c8766451929e904f, type: 3}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0

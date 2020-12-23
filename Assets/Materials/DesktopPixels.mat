@@ -24,7 +24,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Barrel: -0.11
+    - _Barrel: -0.04
     - _ColorMask: 15
     - _Intensity: 0.748
     - _PhosphorBleed: 5.69
@@ -35,6 +35,7 @@ Material:
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _Zoom: 1
+    - _borderFade: 7.7
     - _gridScale: 1
     - _gridToggle: 0
     m_Colors: []
