@@ -106,11 +106,11 @@ public class SecurityCamera : NetworkDevice
             {
                 if (Sweep > 0)
                 {
-                    ServoToPosition(new Vector3(YawPitchZoomMax.x, 0));
+                    ServoToPosition(new Vector3(YawPitchZoomMax.x, 0), .5f);
                 }
                 else
                 {
-                    ServoToPosition(new Vector3(YawPitchZoomMin.x, 0));
+                    ServoToPosition(new Vector3(YawPitchZoomMin.x, 0), .5f);
                 }
                 Sweep *= -1;
             }
@@ -235,10 +235,17 @@ public class SecurityCamera : NetworkDevice
 
     void ServoToPosition(Vector3 NewPosition)
     {
+        ServoToPosition(NewPosition, 1);
+    }
+    void ServoToPosition(Vector3 NewPosition, float SpeedMult)
+    {
+        //TODO: slows down when target is past clamped rotation
+        //  or maybe that's just chance, which happens to line up with framerate dips?
         StartPosition = TargetPosition = UpdatePosition(true);
         LerpTimer = LerpTime = 0;
-        float MaxTime = Mathf.Max(Mathf.Abs(StartPosition.x - NewPosition.x)/ServoSpeed.x, Mathf.Abs(StartPosition.y - NewPosition.y) / ServoSpeed.y, Mathf.Abs(StartPosition.z - NewPosition.z) / ServoSpeed.z);
+        float MaxTime = Mathf.Max(Mathf.Abs(StartPosition.x - NewPosition.x) / (ServoSpeed.x * SpeedMult), Mathf.Abs(StartPosition.y - NewPosition.y) / (ServoSpeed.y * SpeedMult), Mathf.Abs(StartPosition.z - NewPosition.z) / (ServoSpeed.z * SpeedMult));
         LerpToPosition(NewPosition, MaxTime);
+
     }
 
     Vector3 UpdatePosition(bool ReturnOnly = false)

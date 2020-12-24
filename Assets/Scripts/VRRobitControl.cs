@@ -314,6 +314,17 @@ public class VRRobitControl : MonoBehaviour
     void OnMenuButtonUp(ISteamVR_Action_In actionIn, SteamVR_Input_Sources sources)
     {
         FreezeRig = !FreezeRig;
+        if (FreezeRig)
+        {
+            //TODO: this horribly breaks the throwing (probably doesn't really matter since freezing the rig is a debug function)
+            hands[0].enabled = false;
+            hands[1].enabled = false;
+        }
+        else
+        {
+            hands[0].enabled = true;
+            hands[1].enabled = true;
+        }
         Debug.Log("freeze rig");
         MenuButtonReleased();
     }

@@ -127,7 +127,7 @@ MonoBehaviour:
   YawPitchZoomStep: {x: 5, y: 5, z: 5}
   YawPitchZoomMax: {x: 30, y: 15, z: 20}
   YawPitchZoomMin: {x: -30, y: -15, z: 0}
-  ServoSpeed: {x: 8, y: 8, z: 8}
+  ServoSpeed: {x: 16, y: 16, z: 16}
   cameraObject: {fileID: 1376539009752550911}
   cameraPost: {fileID: 8972348709216754857}
   cameraBody: {fileID: 1079770035401955881}
